@@ -1,0 +1,38 @@
+version: '2'
+services: 
+  web:
+    image: nginx
+    ports:
+    - "80:80"
+    - "443:443"
+    links:
+    - php
+    - mysql
+    volumes:
+    - ./vhost:/etc/nginx/conf.d
+    - ./conf/nginx.conf:/etc/nginx/nginx.conf
+    volumes_from:
+    - code
+  php:
+    build: .
+    working_dir: /var/www/default
+    volumes_from:
+    - code
+  mysql:
+    image: mysql
+    ports:
+    - "3306:3306"
+    volumes:
+    - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: raj@123
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test@123
+  code:
+    image: busybox
+    volumes:
+    - ./www:/var/www/default
+  
+
+    
